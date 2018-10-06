@@ -22,6 +22,7 @@ public class NetworkManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
     }
 
     void OnGUI()
@@ -36,9 +37,11 @@ public class NetworkManager : MonoBehaviour
             {
                 PhotonNetwork.CreateRoom(roomName, new RoomOptions()
                 { MaxPlayers = 4, IsOpen = true, IsVisible = true }, lobbyName);
+               
             }
             if (roomsList != null)
             {
+                
                 for (int i = 0; i < roomsList.Length; i++)
                 {
                     
