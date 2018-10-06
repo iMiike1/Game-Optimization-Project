@@ -1,6 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿
 using UnityEngine;
+using System.Collections;
 
 public class Player : Photon.MonoBehaviour {
 
@@ -33,6 +33,11 @@ public class Player : Photon.MonoBehaviour {
     //{
     //    lastSynchronizationTime = Time.time;
     //}
+
+    void Start()
+    {
+        
+    }
     void Update ()
     {
         if (photonView.isMine)
@@ -45,7 +50,7 @@ public class Player : Photon.MonoBehaviour {
         //    SyncedMovement();
         //}
     }
-    void InputMovement ()
+    void InputMovement()
     {
         if (Input.GetKey(KeyCode.W))
             GetComponent<Rigidbody>().MovePosition(GetComponent<Rigidbody>().position + Vector3.forward * speed * Time.deltaTime);
@@ -54,9 +59,7 @@ public class Player : Photon.MonoBehaviour {
         if (Input.GetKey(KeyCode.D))
             GetComponent<Rigidbody>().MovePosition(GetComponent<Rigidbody>().position + Vector3.right * speed * Time.deltaTime);
         if (Input.GetKey(KeyCode.A))
-            GetComponent<Rigidbody>().MovePosition(GetComponent<Rigidbody>().position - Vector3.right * speed * Time.deltaTime);
-        
-        
+            GetComponent<Rigidbody>().MovePosition(GetComponent<Rigidbody>().position - Vector3.right * speed * Time.deltaTime);  
     }
 
     //private void SyncedMovement()
@@ -68,7 +71,9 @@ public class Player : Photon.MonoBehaviour {
     private void InputColorChange()
     {
         if (Input.GetKeyDown(KeyCode.R))
+        {
             ChangeColorTo(new Vector3(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f)));
+        }
     }
 
     [PunRPC]
@@ -77,7 +82,9 @@ public class Player : Photon.MonoBehaviour {
         GetComponent<Renderer>().material.color = new Color(color.x, color.y, color.z, 1f);
 
         if (photonView.isMine)
-        photonView.RPC("ChangeColorTo", PhotonTargets.OthersBuffered, color);
+        {
+            photonView.RPC("ChangeColorTo", PhotonTargets.OthersBuffered, color);
+        }
     }
     
 }

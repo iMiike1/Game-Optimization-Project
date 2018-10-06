@@ -15,7 +15,6 @@ public class NetworkManager : MonoBehaviour
     
     void Start()
     {
-
         PhotonNetwork.ConnectUsingSettings("v4.2");
     }
 
@@ -45,9 +44,9 @@ public class NetworkManager : MonoBehaviour
                 for (int i = 0; i < roomsList.Length; i++)
                 {
                     
-                    if (GUI.Button(new Rect(100, 250 + (110 * i), 250, 100), "Join " + roomsList[i].Name))
+                    if (GUI.Button(new Rect(100, 250 + (110 * i), 250, 100), "Join " + roomsList[i].name))
                     {
-                        PhotonNetwork.JoinRoom(roomsList[i].Name);
+                        PhotonNetwork.JoinRoom(roomsList[i].name);
                     }
                 }
             }
