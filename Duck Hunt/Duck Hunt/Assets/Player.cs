@@ -12,19 +12,35 @@ public class Player : Photon.MonoBehaviour
     private Vector3 syncStartPosition = Vector3.zero;
     private Vector3 syncEndPosition = Vector3.zero;
 
+
+    private Vector3 Jump;
+    public Component[] Renderer;
+    public float jumpForce = 2.0f;
+    Rigidbody rb;
+
+
+    private void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+        Jump = new Vector3(0.0f, 2.0f, 0.0f);
+
+    }
+
     private void Update()
     {
         if (photonView.isMine)
         {
-            //// left or right
-            //float x = Input.GetAxis("Horizontal") * Time.deltaTime * speed;
-            //// forward or backwards
-            //float z = Input.GetAxis("Vertical") * Time.deltaTime * speed;
-            //transform.Translate(x, 0, z, Space.Self);
+            // left or right
+            float x = Input.GetAxis("Horizontal") * Time.deltaTime * speed;
+            // forward or backwards
+            float z = Input.GetAxis("Vertical") * Time.deltaTime * speed;
+            transform.Translate(x, 0, z, Space.Self);
+
+
 
             InputMovement();
             InputColorChange();
-
+           
         }
         else
         {
@@ -63,7 +79,14 @@ public class Player : Photon.MonoBehaviour
             GetComponent<Rigidbody>().MovePosition(GetComponent<Rigidbody>().position + Vector3.right * speed * Time.deltaTime);
         if (Input.GetKey(KeyCode.A))
             GetComponent<Rigidbody>().MovePosition(GetComponent<Rigidbody>().position - Vector3.right * speed * Time.deltaTime);
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            rb.AddForce(Jump * jumpForce, ForceMode.Impulse);
+           
+        }
     }
+
+   
 
     private void Awake()
     {
