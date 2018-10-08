@@ -6,8 +6,8 @@ using UnityEngine;
 public class NetworkManager : MonoBehaviour
 {
 
-    private const string roomName = "RoomName";
-    private TypedLobby lobbyName = new TypedLobby("New_Lobby", LobbyType.Default);
+    private const string roomName = "RoomNam";
+    private TypedLobby lobbyName = new TypedLobby("OLD_LOBBY", LobbyType.Default);
     private RoomInfo[] roomsList;
     public GameObject player;
     // Use this for initialization
@@ -44,9 +44,9 @@ public class NetworkManager : MonoBehaviour
                 for (int i = 0; i < roomsList.Length; i++)
                 {
                     
-                    if (GUI.Button(new Rect(100, 250 + (110 * i), 250, 100), "Join " + roomsList[i].name))
+                    if (GUI.Button(new Rect(100, 250 + (110 * i), 250, 100), "Join " + roomsList[i].Name))
                     {
-                        PhotonNetwork.JoinRoom(roomsList[i].name);
+                        PhotonNetwork.JoinRoom(roomsList[i].Name);
                     }
                 }
             }
@@ -72,6 +72,7 @@ public class NetworkManager : MonoBehaviour
     {
         Debug.Log("Connected To Room");
         PhotonNetwork.Instantiate(player.name, Vector3.up * 5, Quaternion.identity, 0);
+        
        
     }
 
