@@ -141,6 +141,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 10
   Renderer: []
+  jumpForce: 2
 --- !u!136 &136415392223551996
 CapsuleCollider:
   m_ObjectHideFlags: 1
