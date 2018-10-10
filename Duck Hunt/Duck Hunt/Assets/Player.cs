@@ -42,7 +42,7 @@ public class Player : Photon.MonoBehaviour
 
 
             InputMovement();
-            InputColorChange();
+            //InputColorChange();
            
         }
         else
@@ -103,22 +103,22 @@ public class Player : Photon.MonoBehaviour
         transform.position = Vector3.Lerp(syncStartPosition,syncEndPosition,syncTime / syncDelay);
     }
 
-    private void InputColorChange()
-    {
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            ChangeColorTo(new Vector3(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f)));
-        }
-    }
+//    private void InputColorChange()
+//    {
+//        //if (Input.GetKeyDown(KeyCode.R))
+//        //{
+//        //    ChangeColorTo(new Vector3(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f)));
+//        //}
+//    }
 
-    [PunRPC]
-    void ChangeColorTo(Vector3 color)
-    {
-        GetComponent<Renderer>().material.color = new Color(color.x, color.y, color.z, 1f);
+//    [PunRPC]
+//    void ChangeColorTo(Vector3 color)
+//    {
+//        //GetComponent<Renderer>().material.color = new Color(color.x, color.y, color.z, 1f);
 
-        if (photonView.isMine)
-        {
-            photonView.RPC("ChangeColorTo", PhotonTargets.OthersBuffered, color);
-        }
-    }
+//        //if (photonView.isMine)
+//        //{
+//        //    photonView.RPC("ChangeColorTo", PhotonTargets.OthersBuffered, color);
+//        //}
+//    }
 }
