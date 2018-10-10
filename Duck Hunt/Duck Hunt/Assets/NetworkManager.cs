@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+
 
 public class NetworkManager : MonoBehaviour
 {
@@ -9,8 +11,11 @@ public class NetworkManager : MonoBehaviour
     private TypedLobby lobbyName = new TypedLobby("New_Lobby", LobbyType.Default);
     private RoomInfo[] roomList;
     public GameObject player;
-    public Camera PlayerCamera;
+    public GameObject lobbyCamera;
     public GameObject Spawn;
+
+
+
     // Use this for initialization
     void Start()
     {
@@ -70,6 +75,7 @@ public class NetworkManager : MonoBehaviour
     {
         Debug.Log("Connected to Room");
         PhotonNetwork.Instantiate(player.name, Spawn.transform.position, Quaternion.identity, 0);
-            //camera.Target = player.transform;
+        //camera.Target = player.transform;
+        lobbyCamera.SetActive(false);
     }
 }
