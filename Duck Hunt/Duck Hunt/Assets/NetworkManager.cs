@@ -9,7 +9,8 @@ public class NetworkManager : MonoBehaviour
     private TypedLobby lobbyName = new TypedLobby("New_Lobby", LobbyType.Default);
     private RoomInfo[] roomList;
     public GameObject player;
-
+    public Camera PlayerCamera;
+    public GameObject Spawn;
     // Use this for initialization
     void Start()
     {
@@ -68,6 +69,7 @@ public class NetworkManager : MonoBehaviour
     void OnJoinedRoom()
     {
         Debug.Log("Connected to Room");
-        PhotonNetwork.Instantiate(player.name, Vector3.up * 5.0f, Quaternion.identity, 0);
+        PhotonNetwork.Instantiate(player.name, Spawn.transform.position, Quaternion.identity, 0);
+            //camera.Target = player.transform;
     }
 }

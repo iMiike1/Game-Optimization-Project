@@ -15,15 +15,18 @@ public class Player : Photon.MonoBehaviour
 
     private Vector3 Jump;
     public Component[] Renderer;
-    public float jumpForce = 2.0f;
+    public float jumpForce = 15.0f;
     Rigidbody rb;
+    GameObject cap;
+    public Camera cam;
 
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         Jump = new Vector3(0.0f, 2.0f, 0.0f);
-
+        
+        
     }
 
     private void Update()
@@ -79,6 +82,7 @@ public class Player : Photon.MonoBehaviour
             GetComponent<Rigidbody>().MovePosition(GetComponent<Rigidbody>().position + Vector3.right * speed * Time.deltaTime);
         if (Input.GetKey(KeyCode.A))
             GetComponent<Rigidbody>().MovePosition(GetComponent<Rigidbody>().position - Vector3.right * speed * Time.deltaTime);
+
         if (Input.GetKeyDown(KeyCode.Space))
         {
             rb.AddForce(Jump * jumpForce, ForceMode.Impulse);
