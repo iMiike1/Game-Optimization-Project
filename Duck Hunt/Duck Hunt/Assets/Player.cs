@@ -13,12 +13,14 @@ public class Player : Photon.MonoBehaviour
     private Vector3 syncEndPosition = Vector3.zero;
 
 
+
     private Vector3 Jump;
     public Component[] Renderer;
     public float jumpForce = 15.0f;
     Rigidbody rb;
     GameObject cap;
     public Camera cam;
+    public GameObject rifle;
 
 
     private void Start()
@@ -58,6 +60,8 @@ public class Player : Photon.MonoBehaviour
         {
             stream.SendNext(GetComponent<Rigidbody>().position);
             stream.SendNext(GetComponent<Rigidbody>().velocity);
+            stream.SendNext(rifle.gameObject.GetComponent<Rigidbody>().position);
+            stream.SendNext(rifle.gameObject.GetComponent<Rigidbody>().rotation);
         }
         else
         {

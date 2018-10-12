@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Rayviewer : MonoBehaviour {
+public class Rayviewer : Photon.MonoBehaviour {
 
     public float weaponRange = 50f;
 

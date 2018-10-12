@@ -14,7 +14,7 @@ public class Raycast : Photon.MonoBehaviour {
 
     public Transform gunEnd;
 
-
+    public GameObject bulletspawn;
 
     private Camera fpsCam;
 
@@ -43,21 +43,23 @@ public class Raycast : Photon.MonoBehaviour {
         {
             if (Input.GetMouseButtonDown(0) && Time.time > nextFire)
             {
-                Debug.Log("Shot");
+                
                 nextFire = Time.time + fireRate;
                 StartCoroutine(Effect());
                 Vector3 rayOrigin = fpsCam.ViewportToWorldPoint(new Vector3(.5f, .5f, 0));
 
                 RaycastHit hit;
 
-                if (Physics.Raycast(rayOrigin, fpsCam.transform.forward, out hit, weaponRange))
+                if (Physics.Raycast(bulletspawn.transform.position, fpsCam.transform.forward, out hit, weaponRange))
                 {
-                    laserLine.SetPosition(1, hit.point);
+                    laserLine.SetPosition(0, gunEnd.position);
+                    Debug.Log("outhit");
 
                 }
                 else
                 {
-                    laserLine.SetPosition(1, rayOrigin + (fpsCam.transform.forward * weaponRange));
+                    laserLine.SetPosition(1, bulletspawn.transform.position + (fpsCam.transform.forward * weaponRange));
+                    Debug.Log("NotHit");
                 }
 
 
