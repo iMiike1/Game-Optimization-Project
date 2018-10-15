@@ -11,23 +11,31 @@ public class Player : Photon.MonoBehaviour
     private float syncTime = 0f;
     private Vector3 syncStartPosition = Vector3.zero;
     private Vector3 syncEndPosition = Vector3.zero;
+    [SerializeField] private GameObject playerCamera;
+    [SerializeField] private MonoBehaviour[] playerControlScripts;
 
+    private Quaternion syncStartPositionR = Quaternion.Euler(Vector3.zero);
+    private Quaternion syncEndPositionR = Quaternion.Euler(Vector3.zero);
 
+    //relative movement
+    public Transform cam;
+    public Transform camPivot;
+    float heading = 0;
 
     private Vector3 Jump;
     public Component[] Renderer;
     public float jumpForce = 15.0f;
     Rigidbody rb;
     GameObject cap;
-    public Camera cam;
-    public GameObject rifle;
+    
+   
 
-
+    Vector2 input;
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         Jump = new Vector3(0.0f, 2.0f, 0.0f);
-        
+        Initialize();
         
     }
 
@@ -60,19 +68,21 @@ public class Player : Photon.MonoBehaviour
         {
             stream.SendNext(GetComponent<Rigidbody>().position);
             stream.SendNext(GetComponent<Rigidbody>().velocity);
-            stream.SendNext(rifle.gameObject.GetComponent<Rigidbody>().position);
-            stream.SendNext(rifle.gameObject.GetComponent<Rigidbody>().rotation);
+            stream.SendNext(GetComponent<Rigidbody>().rotation);
         }
         else
         {
             Vector3 syncPosition = (Vector3)stream.ReceiveNext();
             Vector3 syncVelocity = (Vector3)stream.ReceiveNext();
+            Quaternion syncRotation = (Quaternion)stream.ReceiveNext();
             Debug.Log(syncPosition);
             syncTime = 0f;
             syncDelay = Time.time - lastsynchronizationTime;
             lastsynchronizationTime = Time.time;
             syncEndPosition = syncPosition + syncVelocity * syncDelay;
+            syncEndPositionR = syncRotation * Quaternion.Euler(syncVelocity * syncDelay);
             syncStartPosition = GetComponent<Rigidbody>().position;
+            syncStartPositionR = GetComponent<Rigidbody>().rotation;
         }
     }
 
@@ -92,6 +102,24 @@ public class Player : Photon.MonoBehaviour
             rb.AddForce(Jump * jumpForce, ForceMode.Impulse);
            
         }
+
+        //heading += Input.GetAxis("Mouse X") * Time.deltaTime * 100;
+        //camPivot.rotation = Quaternion.Euler(0, heading, 0);
+
+        //input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        //input = Vector2.ClampMagnitude(input, 1);
+
+        //Vector3 camF = cam.forward;
+        //Vector3 camR = cam.right;
+
+        //camF.y = 0;
+        //camR.y = 0;
+        //camF = camF.normalized;
+        //camR = camR.normalized;
+
+
+        //transform.position += ((camF * input.y + camR * input.x) * speed);
+
     }
 
    
@@ -99,30 +127,53 @@ public class Player : Photon.MonoBehaviour
     private void Awake()
     {
         lastsynchronizationTime = Time.time;
+
     }
 
     private void SyncMovement()
     {
         syncTime += Time.deltaTime;
         transform.position = Vector3.Lerp(syncStartPosition,syncEndPosition,syncTime / syncDelay);
+        GetComponent<Rigidbody>().rotation = Quaternion.Lerp(syncStartPositionR, syncEndPositionR, syncTime / syncDelay);
     }
 
-//    private void InputColorChange()
-//    {
-//        //if (Input.GetKeyDown(KeyCode.R))
-//        //{
-//        //    ChangeColorTo(new Vector3(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f)));
-//        //}
-//    }
+    private void Initialize()
+    {
+        if (photonView.isMine)
+        {
 
-//    [PunRPC]
-//    void ChangeColorTo(Vector3 color)
-//    {
-//        //GetComponent<Renderer>().material.color = new Color(color.x, color.y, color.z, 1f);
+        }
+        //handle functionality for non local character, disable camera and control scripts
+        else
+        {
+            // disable camera
+            playerCamera.SetActive(false);
+            //disable control scripts
+            foreach (MonoBehaviour m in playerControlScripts)
+            {
+                m.enabled = false;
+            }
+        }
 
-//        //if (photonView.isMine)
-//        //{
-//        //    photonView.RPC("ChangeColorTo", PhotonTargets.OthersBuffered, color);
-//        //}
-//    }
+
+    }
+
+    //    private void InputColorChange()
+    //    {
+    //        //if (Input.GetKeyDown(KeyCode.R))
+    //        //{
+    //        //    ChangeColorTo(new Vector3(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f)));
+    //        //}
+    //    }
+
+    //    [PunRPC]
+    //    void ChangeColorTo(Vector3 color)
+    //    {
+    //        //GetComponent<Renderer>().material.color = new Color(color.x, color.y, color.z, 1f);
+
+    //        //if (photonView.isMine)
+    //        //{
+    //        //    photonView.RPC("ChangeColorTo", PhotonTargets.OthersBuffered, color);
+    //        //}
+    //    }
 }
