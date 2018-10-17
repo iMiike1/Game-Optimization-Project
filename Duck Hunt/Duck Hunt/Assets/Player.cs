@@ -102,27 +102,9 @@ public class Player : Photon.MonoBehaviour
             rb.AddForce(Jump * jumpForce, ForceMode.Impulse);
            
         }
-
-        //heading += Input.GetAxis("Mouse X") * Time.deltaTime * 100;
-        //camPivot.rotation = Quaternion.Euler(0, heading, 0);
-
-        //input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-        //input = Vector2.ClampMagnitude(input, 1);
-
-        //Vector3 camF = cam.forward;
-        //Vector3 camR = cam.right;
-
-        //camF.y = 0;
-        //camR.y = 0;
-        //camF = camF.normalized;
-        //camR = camR.normalized;
-
-
-        //transform.position += ((camF * input.y + camR * input.x) * speed);
+        
 
     }
-
-   
 
     private void Awake()
     {
@@ -158,22 +140,4 @@ public class Player : Photon.MonoBehaviour
 
     }
 
-    //    private void InputColorChange()
-    //    {
-    //        //if (Input.GetKeyDown(KeyCode.R))
-    //        //{
-    //        //    ChangeColorTo(new Vector3(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f)));
-    //        //}
-    //    }
-
-    //    [PunRPC]
-    //    void ChangeColorTo(Vector3 color)
-    //    {
-    //        //GetComponent<Renderer>().material.color = new Color(color.x, color.y, color.z, 1f);
-
-    //        //if (photonView.isMine)
-    //        //{
-    //        //    photonView.RPC("ChangeColorTo", PhotonTargets.OthersBuffered, color);
-    //        //}
-    //    }
 }
