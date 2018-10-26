@@ -8,7 +8,7 @@ public class PongNetManager : MonoBehaviour {
     private TypedLobby lobbyName = new TypedLobby("New_Lobby", LobbyType.Default);
     private RoomInfo[] roomsList;
     public GameObject player;
-    public GameObject ball;
+    //public GameObject ball;
 
 	// Use this for initialization
 	void Start () {
@@ -32,7 +32,7 @@ public class PongNetManager : MonoBehaviour {
             if(GUI.Button(new Rect(100, 100, 250, 100), "Start Server"))
             {
                 PhotonNetwork.CreateRoom(roomName, new RoomOptions()
-                { maxPlayers = 4, isOpen = true, isVisible = true }, lobbyName);
+                { MaxPlayers = 4, IsOpen = true, IsVisible = true }, lobbyName);
 
             }
 
@@ -40,9 +40,9 @@ public class PongNetManager : MonoBehaviour {
             {
                 for (int i = 0; i < roomsList.Length; i++)
                 {
-                    if (GUI.Button(new Rect(100, 250 + (110 * i), 250, 100), "Join" + roomsList[i].name))
+                    if (GUI.Button(new Rect(100, 250 + (110 * i), 250, 100), "Join" + roomsList[i].Name))
                     {
-                        PhotonNetwork.JoinRoom(roomsList[i].name);
+                        PhotonNetwork.JoinRoom(roomsList[i].Name);
                     }
                 }
             }
@@ -74,14 +74,18 @@ public class PongNetManager : MonoBehaviour {
         if (PhotonNetwork.playerList.Length > 1)
         {
             PhotonNetwork.Instantiate(player.name,
-                new Vector3(-4f, 1.5f, -2f), Quaternion.identity, 0);
-            PhotonNetwork.Instantiate(ball.name,
-                new Vector3(0f, 1.5f, -2f), Quaternion.identity, 0);
+               new Vector3(-4f, 1.5f, -2f), Quaternion.identity, 0);
+            //PhotonNetwork.Instantiate(ball.name,
+            // new Vector3(0f, 1.5f, -2f), Quaternion.identity, 0);
+            //Camera.allCameras[0].enabled = false;
         }
         else
         {
             PhotonNetwork.Instantiate(player.name,
-                new Vector3(4f, 1.5f, -2f), Quaternion.identity, 0);
+               new Vector3(8f, 1.5f, -2f), Quaternion.identity, 0);
+
+            //Camera.allCameras[0].enabled = false;
+            Debug.Log(Camera.allCamerasCount);
         }
     }
 }

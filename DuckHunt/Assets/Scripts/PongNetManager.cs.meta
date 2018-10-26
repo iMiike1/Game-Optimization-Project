@@ -3,7 +3,9 @@ guid: 9cc3bdc52604c5042a11fe2125c827f2
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - player: {instanceID: 0}
+  - ball: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
