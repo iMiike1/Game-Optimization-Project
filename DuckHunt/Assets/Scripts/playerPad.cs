@@ -8,8 +8,10 @@ public class playerPad : Photon.MonoBehaviour {
     public float jumpheight;
     public bool isFalling = false;
     public bool isGrounded = true;
+    public GameObject bullet;
+    public Transform bulletSpawn;   
 
-
+    public float thrust = 500;
     public Vector3 position;
 
 
@@ -23,15 +25,13 @@ public class playerPad : Photon.MonoBehaviour {
         }
     }
 
-    private void Awake()
-    {
-    }
 
     // Use this for initialization
     void Start () {
         if (photonView.isMine) {
             Camera.current.transform.parent = transform;
-            Camera.current.transform.localPosition = new Vector3(0, 1.5f, -10f);
+            Camera.current.transform.localPosition = new Vector3(0, 0.35f, -0f);
+           
         }
         
 	}
@@ -57,6 +57,10 @@ public class playerPad : Photon.MonoBehaviour {
 
     void InputMovement()
     {
+
+        if (Input.GetMouseButtonDown(0))
+            Shoot();
+
         if (Input.GetKey(KeyCode.UpArrow))
             transform.Translate(0.0f, 0.0f, 1, Space.Self);
         //GetComponent<Rigidbody>().MovePosition(GetComponent<Rigidbody>().position + Vector3.forward * speed * Time.deltaTime);
@@ -74,23 +78,36 @@ public class playerPad : Photon.MonoBehaviour {
             transform.Translate(0.0f, 0.0f, -1, Space.Self);
         //GetComponent<Rigidbody>().MovePosition(GetComponent<Rigidbody>().position + Vector3.back * speed * Time.deltaTime);
 
-        //if (Input.GetKey(KeyCode.Space) && isFalling == false && isGrounded == true)
-        //{
-        //    Debug.Log(new Vector3(0, 1 * jumpheight, 0));
-        //    GetComponent<Rigidbody>().AddForce(new Vector3(0, jumpheight, 0), ForceMode.Impulse);
-        //    isFalling = true;
-        //    isGrounded = false;
-        //}
-   
-        //if(GetComponent<Rigidbody>().velocity.y == 0)
-        //{
-        //    isGrounded = true;
+        if (Input.GetKey(KeyCode.Space) && isFalling == false && isGrounded == true)
+        {
+           
+            GetComponent<Rigidbody>().AddForce(new Vector3(0, jumpheight, 0), ForceMode.Impulse);
+            isFalling = true;
+            isGrounded = false;
+        }
 
-        //    if (isGrounded == true)
-        //    {
-        //        isFalling = false;
-        //    }
-        //}
+        if (GetComponent<Rigidbody>().velocity.y == 0)
+        {
+            isGrounded = true;
+
+            if (isGrounded == true)
+            {
+                isFalling = false;
+            }
+        }
 
     }
+
+    void Shoot()
+    {
+        var Bullet = (GameObject)Instantiate(
+        bullet,
+        bulletSpawn.transform.position,
+        bulletSpawn.transform.rotation);
+
+        Bullet.GetComponent<Rigidbody>().velocity = Bullet.transform.forward * 500;
+
+        Destroy(Bullet, 5.0f);
+    }
+
 }
