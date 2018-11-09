@@ -63,6 +63,11 @@ public static class PhotonNetwork
     /// <summary>Currently used Cloud Region (if any). As long as the client is not on a Master Server or Game Server, the region is not yet defined.</summary>
     public static CloudRegionCode CloudRegion { get { return (networkingPeer != null && connected && Server!=ServerConnection.NameServer) ? networkingPeer.CloudRegion : CloudRegionCode.none; } }
 
+    internal static void Instantiate(string name, Vector3 position, Quaternion rotation)
+    {
+        throw new NotImplementedException();
+    }
+
     /// <summary>
     /// False until you connected to Photon initially. True in offline mode, while connected to any server and even while switching servers.
     /// </summary>

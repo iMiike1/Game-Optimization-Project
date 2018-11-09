@@ -9,10 +9,16 @@ public class playerPad : Photon.MonoBehaviour {
     public bool isFalling = false;
     public bool isGrounded = true;
     public GameObject bullet;
-    public Transform bulletSpawn;   
-
+    public Transform bulletSpawn;
+    private GameObject iBullet;
+    float heading = 0;
     public float thrust = 500;
     public Vector3 position;
+    Vector2 input;
+
+    // CAMERA MOVEMENT
+    public Transform cam;
+    public Transform camPoint;
 
 
     void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
@@ -25,12 +31,22 @@ public class playerPad : Photon.MonoBehaviour {
         }
     }
 
+     void Awake()
+    {
+
+        cam = GetComponent<Transform>();
+        camPoint = GetComponent<Transform>();
+       
+        
+    }
+
 
     // Use this for initialization
     void Start () {
         if (photonView.isMine) {
-            Camera.current.transform.parent = transform;
-            Camera.current.transform.localPosition = new Vector3(0, 0.35f, -0f);
+            //Camera.current.transform.parent = transform;
+            //Camera.current.transform.localPosition = new Vector3(0, 0.35f, -0f);
+            //Camera.current.transform.LookAt(this.transform.position);
            
         }
         
@@ -58,6 +74,28 @@ public class playerPad : Photon.MonoBehaviour {
     void InputMovement()
     {
 
+        ////Camera Movement
+        //heading += Input.GetAxis("Mouse X") * Time.deltaTime * 100;
+        //camPoint.rotation = Quaternion.Euler(0, heading, 0);
+
+        //input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        //input = Vector2.ClampMagnitude(input, 1);
+
+        //Vector3 camF = cam.forward;
+        //Vector3 camR = cam.right;
+
+        //camF.y = 0;
+        //camR.y = 0;
+        //camF = camF.normalized;
+        //camR = camR.normalized;
+
+
+        //transform.position += ((camF * input.y + camR * input.x) * speed); 
+
+
+
+
+
         if (Input.GetMouseButtonDown(0))
             Shoot();
 
@@ -77,6 +115,7 @@ public class playerPad : Photon.MonoBehaviour {
         if (Input.GetKey(KeyCode.DownArrow))
             transform.Translate(0.0f, 0.0f, -1, Space.Self);
         //GetComponent<Rigidbody>().MovePosition(GetComponent<Rigidbody>().position + Vector3.back * speed * Time.deltaTime);
+
 
         if (Input.GetKey(KeyCode.Space) && isFalling == false && isGrounded == true)
         {
@@ -100,14 +139,10 @@ public class playerPad : Photon.MonoBehaviour {
 
     void Shoot()
     {
-        var Bullet = (GameObject)Instantiate(
-        bullet,
-        bulletSpawn.transform.position,
-        bulletSpawn.transform.rotation);
+      iBullet =  PhotonNetwork.Instantiate(bullet.name,bulletSpawn.transform.position,Quaternion.identity,0);
 
-        Bullet.GetComponent<Rigidbody>().velocity = Bullet.transform.forward * 500;
+        Destroy(iBullet, 5.0f);
 
-        Destroy(Bullet, 5.0f);
     }
 
 }
