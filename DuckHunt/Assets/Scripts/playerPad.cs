@@ -34,20 +34,24 @@ public class playerPad : Photon.MonoBehaviour {
      void Awake()
     {
 
-        cam = GetComponent<Transform>();
-        camPoint = GetComponent<Transform>();
-       
+        
         
     }
 
 
     // Use this for initialization
     void Start () {
-        if (photonView.isMine) {
-            //Camera.current.transform.parent = transform;
-            //Camera.current.transform.localPosition = new Vector3(0, 0.35f, -0f);
-            //Camera.current.transform.LookAt(this.transform.position);
-           
+
+        
+
+        if (photonView.isMine)
+        {
+            
+        
+        }
+        else
+        {
+            
         }
         
 	}
@@ -57,8 +61,9 @@ public class playerPad : Photon.MonoBehaviour {
     {
         if (photonView.isMine)
         {
-            InputMovement();
+            //InputMovement();
             //Debug.Log(Camera.current.transform.parent.name);
+            
         }
         else {
             SyncMovement();

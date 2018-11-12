@@ -8,6 +8,9 @@ public class PongNetManager : MonoBehaviour {
     private TypedLobby lobbyName = new TypedLobby("New_Lobby", LobbyType.Default);
     private RoomInfo[] roomsList;
     public GameObject player;
+    public playerPad pp;
+    public Camera PlayerCam;
+
     //public GameObject ball;
 
 	// Use this for initialization
@@ -73,19 +76,32 @@ public class PongNetManager : MonoBehaviour {
         print(PhotonNetwork.playerList.Length);
         if (PhotonNetwork.playerList.Length > 1)
         {
-            PhotonNetwork.Instantiate(player.name,
-               new Vector3(-4f, 1.5f, -2f), Quaternion.identity, 0);
+           
+            
+        
+
             //PhotonNetwork.Instantiate(ball.name,
             // new Vector3(0f, 1.5f, -2f), Quaternion.identity, 0);
             //Camera.allCameras[0].enabled = false;
+            
         }
         else
         {
-            PhotonNetwork.Instantiate(player.name,
-               new Vector3(8f, 1.5f, -2f), Quaternion.identity, 0);
+            GameObject mPlayer = (GameObject)PhotonNetwork.Instantiate(player.name,new Vector3(8f, 1.5f, -2f), Quaternion.identity, 0);
+            Camera CharacterCamera = mPlayer.GetComponent<Camera>();
+            CharacterCamera.enabled = true;
+
+
 
             //Camera.allCameras[0].enabled = false;
             Debug.Log(Camera.allCamerasCount);
         }
+    }
+
+
+    void SpawnPlayer()
+    {
+        PhotonNetwork.Instantiate(player.name, new Vector3(-4f, 1.5f, -2f), Quaternion.identity, 0);
+       
     }
 }

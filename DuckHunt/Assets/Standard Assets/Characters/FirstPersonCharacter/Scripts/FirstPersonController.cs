@@ -6,8 +6,8 @@ using Random = UnityEngine.Random;
 
 namespace UnityStandardAssets.Characters.FirstPerson
 {
-    [RequireComponent(typeof (CharacterController))]
-    [RequireComponent(typeof (AudioSource))]
+    
+
     public class FirstPersonController : MonoBehaviour
     {
         [SerializeField] private bool m_IsWalking;
@@ -42,9 +42,12 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private bool m_Jumping;
         private AudioSource m_AudioSource;
 
+        
+
         // Use this for initialization
         private void Start()
         {
+           
             m_CharacterController = GetComponent<CharacterController>();
             m_Camera = Camera.main;
             m_OriginalCameraPosition = m_Camera.transform.localPosition;
@@ -55,6 +58,9 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_Jumping = false;
             m_AudioSource = GetComponent<AudioSource>();
 			m_MouseLook.Init(transform , m_Camera.transform);
+
+
+
         }
 
 
