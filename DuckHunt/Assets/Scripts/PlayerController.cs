@@ -20,6 +20,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
             public float RunMultiplier = 2.0f;   // Speed when sprinting
             public KeyCode RunKey = KeyCode.LeftShift;
             public float JumpForce = 30f;
+
+             float syncDelay = 0f;
+             float syncTime = 0f;
+
+
             public AnimationCurve SlopeCurveModifier = new AnimationCurve(new Keyframe(-90.0f, 1.0f), new Keyframe(0.0f, 1.0f), new Keyframe(90.0f, 0.0f));
             [HideInInspector] public float CurrentTargetSpeed = 8f;
 
@@ -129,17 +134,32 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
             if (photonView.isMine)
             {
-                
+
             }
             else
             {
-                
+
             }
 
         }
 
 
         private void Update()
+        {
+
+            if (photonView.isMine)
+            {
+                ViewandJump();
+            }
+            else
+            {
+
+            }
+
+        }
+
+
+        void ViewandJump()
         {
             RotateView();
 
@@ -152,6 +172,20 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
         private void FixedUpdate()
         {
+
+            if (photonView.isMine)
+            {
+                Movement();
+            }
+            else
+            {
+
+            }
+        }
+
+        void Movement()
+        {
+
             GroundCheck();
             Vector2 input = GetInput();
 
@@ -197,8 +231,13 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 }
             }
             m_Jump = false;
+
         }
 
+        private void SyncedMovement()
+        {
+            
+        }
 
         private float SlopeMultiplier()
         {

@@ -81,8 +81,9 @@ public class NetworkManager : MonoBehaviour
     void SpawnPlayer()
     {
       GameObject mPLayer= (GameObject) PhotonNetwork.Instantiate(player.name, new Vector3(-4f, 1.5f, -2f), Quaternion.identity, 0);
-        ((MonoBehaviour)mPLayer.GetComponent("PlayerController")).enabled = true;
-        
+        //((MonoBehaviour)mPLayer.GetComponent("PlayerController")).enabled = true;
+        mPLayer.GetComponent<UnityStandardAssets.Characters.FirstPerson.PlayerController>().enabled = true;
+
         mPLayer.transform.Find("MainCamera").gameObject.SetActive(true);
 
     }
