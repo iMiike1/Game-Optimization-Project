@@ -394,7 +394,6 @@ MonoBehaviour:
   player: {fileID: 1743297957550906, guid: ce85668de80629f4ea17d89a84a40f1d, type: 2}
   defaultCamera: {fileID: 0}
   pc: {fileID: 0}
-  cam: {fileID: 0}
 --- !u!1 &1027691746
 GameObject:
   m_ObjectHideFlags: 0
