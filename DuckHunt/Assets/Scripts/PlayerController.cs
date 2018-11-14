@@ -11,6 +11,15 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
     public class PlayerController : Photon.MonoBehaviour
     {
+        // PUN
+        public float lastSynchroniztionTime = 0f;
+        private float syncDelay = 0f;
+        private float syncTime = 0f;
+        private Vector3 syncStartPosition = Vector3.zero;
+        private Vector3 syncEndPosition = Vector3.zero;
+        public Quaternion targetRotation;
+
+        public Camera cam;
         [Serializable]
         public class MovementSettings
         {
@@ -21,6 +30,10 @@ namespace UnityStandardAssets.Characters.FirstPerson
             public KeyCode RunKey = KeyCode.LeftShift;
             public float JumpForce = 30f;
             public AnimationCurve SlopeCurveModifier = new AnimationCurve(new Keyframe(-90.0f, 1.0f), new Keyframe(0.0f, 1.0f), new Keyframe(90.0f, 0.0f));
+
+           
+
+
             [HideInInspector] public float CurrentTargetSpeed = 8f;
 
 #if !MOBILE_INPUT
@@ -80,7 +93,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         }
 
 
-        public Camera cam;
+        
         public MovementSettings movementSettings = new MovementSettings();
         public MouseLook mouseLook = new MouseLook();
         public AdvancedSettings advancedSettings = new AdvancedSettings();
@@ -122,26 +135,64 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
 
         private void Start()
-        {
-            m_RigidBody = GetComponent<Rigidbody>();
-            m_Capsule = GetComponent<CapsuleCollider>();
-            mouseLook.Init(transform, cam.transform);
-
-            if (photonView.isMine)
+        {if (photonView.isMine)
             {
-                
+                m_RigidBody = GetComponent<Rigidbody>();
+                m_Capsule = GetComponent<CapsuleCollider>();
+                mouseLook.Init(transform, cam.transform);
+            }
+        }
+
+        void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+        {
+            if (stream.isWriting)
+            {
+                stream.SendNext(GetComponent<Rigidbody>().position);
+                stream.SendNext(GetComponent<Rigidbody>().velocity);
+                stream.SendNext(cam.transform.rotation);
+                stream.SendNext(transform.rotation);
             }
             else
             {
+                Vector3 syncPosition = (Vector3)stream.ReceiveNext();
+                Vector3 syncVelocity = (Vector3)stream.ReceiveNext();
+                targetRotation = (Quaternion)stream.ReceiveNext();
                 
-            }
+                syncTime = 0f;
+                syncDelay = Time.time - lastSynchroniztionTime;
+                lastSynchroniztionTime = Time.time;
+                syncEndPosition = (syncPosition + syncVelocity * syncDelay);
+                syncStartPosition = GetComponent<Rigidbody>().position;
 
+            }
         }
+
+        void Awake()
+        {
+            lastSynchroniztionTime = Time.deltaTime;
+        }
+
 
 
         private void Update()
         {
             RotateView();
+            if (photonView.isMine)
+            {
+                cam.enabled = true;
+                CrossPlatManager();
+            }
+            else
+            {
+                cam.enabled = false;
+                syncedMovement();
+            }
+        }
+
+
+        void CrossPlatManager()
+        {
+            
 
             if (CrossPlatformInputManager.GetButtonDown("Jump") && !m_Jump)
             {
@@ -149,8 +200,25 @@ namespace UnityStandardAssets.Characters.FirstPerson
             }
         }
 
-
         private void FixedUpdate()
+        {
+            if (photonView.isMine)
+            {
+                Movements();
+            }
+            else {
+                syncedMovement();
+            }
+        }
+
+        private void syncedMovement()
+        {
+            syncTime += Time.deltaTime;
+            GetComponent<Rigidbody>().position = Vector3.Lerp(syncStartPosition, syncEndPosition, syncTime / syncDelay);
+        }
+
+
+        void Movements()
         {
             GroundCheck();
             Vector2 input = GetInput();
@@ -244,6 +312,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             float oldYRotation = transform.eulerAngles.y;
 
             mouseLook.LookRotation(transform, cam.transform);
+            
 
             if (m_IsGrounded || advancedSettings.airControl)
             {
