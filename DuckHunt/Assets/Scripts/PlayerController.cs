@@ -11,15 +11,17 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
     public class PlayerController : Photon.MonoBehaviour
     {
-        // PUN
+        //PUN
         public float lastSynchroniztionTime = 0f;
         private float syncDelay = 0f;
         private float syncTime = 0f;
         private Vector3 syncStartPosition = Vector3.zero;
         private Vector3 syncEndPosition = Vector3.zero;
-        public Quaternion targetRotation;
+        private Quaternion endRotation = Quaternion.identity;
+        public GameObject gun;
 
-        public Camera cam;
+      
+
         [Serializable]
         public class MovementSettings
         {
@@ -31,7 +33,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             public float JumpForce = 30f;
             public AnimationCurve SlopeCurveModifier = new AnimationCurve(new Keyframe(-90.0f, 1.0f), new Keyframe(0.0f, 1.0f), new Keyframe(90.0f, 0.0f));
 
-           
+
 
 
             [HideInInspector] public float CurrentTargetSpeed = 8f;
@@ -79,8 +81,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             }
 #endif
         }
-
-
+        
         [Serializable]
         public class AdvancedSettings
         {
@@ -92,19 +93,15 @@ namespace UnityStandardAssets.Characters.FirstPerson
             public float shellOffset; //reduce the radius by that ratio to avoid getting stuck in wall (a value of 0.1f is nice)
         }
 
-
-        
         public MovementSettings movementSettings = new MovementSettings();
         public MouseLook mouseLook = new MouseLook();
         public AdvancedSettings advancedSettings = new AdvancedSettings();
-
 
         private Rigidbody m_RigidBody;
         private CapsuleCollider m_Capsule;
         private float m_YRotation;
         private Vector3 m_GroundContactNormal;
         private bool m_Jump, m_PreviouslyGrounded, m_Jumping, m_IsGrounded;
-
 
         public Vector3 Velocity
         {
@@ -128,18 +125,38 @@ namespace UnityStandardAssets.Characters.FirstPerson
 #if !MOBILE_INPUT
                 return movementSettings.Running;
 #else
-	            return false;
+        	            return false;
 #endif
             }
         }
 
+        void Awake()
+        {
+            lastSynchroniztionTime = Time.deltaTime;
+        }
 
         private void Start()
-        {if (photonView.isMine)
-            {
-                m_RigidBody = GetComponent<Rigidbody>();
-                m_Capsule = GetComponent<CapsuleCollider>();
-                mouseLook.Init(transform, cam.transform);
+        {
+            
+
+            m_RigidBody = GetComponent<Rigidbody>();
+            m_Capsule = GetComponent<CapsuleCollider>();
+            if (photonView.isMine) {
+                
+                Vector3 position = transform.position;
+                position.y += 1.5f;
+                position.z += 0f;
+                GameObject.FindWithTag("Camera").GetComponent<Camera>().transform.position = position;
+                GameObject.FindWithTag("Camera").GetComponent<Camera>().transform.rotation = transform.rotation;
+                GameObject.FindWithTag("Camera").GetComponent<Camera>().transform.parent = transform;
+                mouseLook.Init(transform, GameObject.FindWithTag("Camera").GetComponent<Camera>().transform);
+
+                
+               //GameObject mGun = (GameObject)PhotonNetwork.Instantiate(gun.name, new Vector3(transform.position.x, transform.position.y+1, transform.position.z+1), Quaternion.identity, 0);
+               // mGun.transform.parent = GameObject.FindWithTag("Camera").transform;
+
+                
+
             }
         }
 
@@ -149,54 +166,21 @@ namespace UnityStandardAssets.Characters.FirstPerson
             {
                 stream.SendNext(GetComponent<Rigidbody>().position);
                 stream.SendNext(GetComponent<Rigidbody>().velocity);
-                stream.SendNext(cam.transform.rotation);
-                stream.SendNext(transform.rotation);
+                stream.SendNext(GetComponent<Rigidbody>().rotation);
             }
             else
             {
                 Vector3 syncPosition = (Vector3)stream.ReceiveNext();
                 Vector3 syncVelocity = (Vector3)stream.ReceiveNext();
-                targetRotation = (Quaternion)stream.ReceiveNext();
-                
+                Quaternion syncRotation = (Quaternion)stream.ReceiveNext();
+
                 syncTime = 0f;
                 syncDelay = Time.time - lastSynchroniztionTime;
                 lastSynchroniztionTime = Time.time;
                 syncEndPosition = (syncPosition + syncVelocity * syncDelay);
                 syncStartPosition = GetComponent<Rigidbody>().position;
+                endRotation = syncRotation;
 
-            }
-        }
-
-        void Awake()
-        {
-            lastSynchroniztionTime = Time.deltaTime;
-        }
-
-
-
-        private void Update()
-        {
-            RotateView();
-            if (photonView.isMine)
-            {
-                cam.enabled = true;
-                CrossPlatManager();
-            }
-            else
-            {
-                cam.enabled = false;
-                syncedMovement();
-            }
-        }
-
-
-        void CrossPlatManager()
-        {
-            
-
-            if (CrossPlatformInputManager.GetButtonDown("Jump") && !m_Jump)
-            {
-                m_Jump = true;
             }
         }
 
@@ -204,10 +188,21 @@ namespace UnityStandardAssets.Characters.FirstPerson
         {
             if (photonView.isMine)
             {
+                RotateView();
                 Movements();
+                CrossPlatManager();
             }
-            else {
+            else
+            {
                 syncedMovement();
+            }
+        }
+
+        void CrossPlatManager()
+        {
+            if (CrossPlatformInputManager.GetButtonDown("Jump") && !m_Jump)
+            {
+                m_Jump = true;
             }
         }
 
@@ -215,18 +210,25 @@ namespace UnityStandardAssets.Characters.FirstPerson
         {
             syncTime += Time.deltaTime;
             GetComponent<Rigidbody>().position = Vector3.Lerp(syncStartPosition, syncEndPosition, syncTime / syncDelay);
+            GetComponent<Rigidbody>().rotation = endRotation;
         }
-
 
         void Movements()
         {
+
+            
+
             GroundCheck();
             Vector2 input = GetInput();
 
             if ((Mathf.Abs(input.x) > float.Epsilon || Mathf.Abs(input.y) > float.Epsilon) && (advancedSettings.airControl || m_IsGrounded))
             {
                 // always move along the camera forward as it is the direction that it being aimed at
-                Vector3 desiredMove = cam.transform.forward * input.y + cam.transform.right * input.x;
+                Vector3 desiredMove = 
+                    GameObject.FindWithTag("Camera").GetComponent<Camera>().transform.forward * 
+                    input.y + 
+                    GameObject.FindWithTag("Camera").GetComponent<Camera>().transform.right * 
+                    input.x;
                 desiredMove = Vector3.ProjectOnPlane(desiredMove, m_GroundContactNormal).normalized;
 
                 desiredMove.x = desiredMove.x * movementSettings.CurrentTargetSpeed;
@@ -267,13 +269,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_Jump = false;
         }
 
-
         private float SlopeMultiplier()
         {
             float angle = Vector3.Angle(m_GroundContactNormal, Vector3.up);
             return movementSettings.SlopeCurveModifier.Evaluate(angle);
         }
-
 
         private void StickToGroundHelper()
         {
@@ -289,7 +289,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
             }
         }
 
-
         private Vector2 GetInput()
         {
 
@@ -302,7 +301,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
             return input;
         }
 
-
         private void RotateView()
         {
             //avoids the mouse looking if the game is effectively paused
@@ -311,8 +309,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             // get the rotation before it's changed
             float oldYRotation = transform.eulerAngles.y;
 
-            mouseLook.LookRotation(transform, cam.transform);
-            
+            mouseLook.LookRotation(transform, GameObject.FindWithTag("Camera").GetComponent<Camera>().transform);
 
             if (m_IsGrounded || advancedSettings.airControl)
             {
@@ -343,5 +340,10 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 m_Jumping = false;
             }
         }
+
+   
+
     }
+
+
 }

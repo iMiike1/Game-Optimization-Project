@@ -9,22 +9,11 @@ public class NetworkManager : MonoBehaviour
     private TypedLobby lobbyName = new TypedLobby("New_Lobby", LobbyType.Default);
     private RoomInfo[] roomsList;
     public GameObject player;
-    public GameObject defaultCamera;
-    public GameObject pc;
-    public GameObject cam;
-    
-    //public GameObject ball;
 
     // Use this for initialization
     void Start()
     {
         PhotonNetwork.ConnectUsingSettings("v4.2");
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     private void OnGUI()
@@ -70,7 +59,6 @@ public class NetworkManager : MonoBehaviour
     void OnJoinedLobby()
     {
         Debug.Log("Joined Lobby");
-
     }
 
     void OnJoinedRoom()
@@ -81,14 +69,13 @@ public class NetworkManager : MonoBehaviour
 
     void SpawnPlayer()
     {
-      GameObject mPLayer= (GameObject) PhotonNetwork.Instantiate(player.name, new Vector3(-4f, 1.5f, -2f), Quaternion.identity, 0);
-        ((MonoBehaviour)mPLayer.GetComponent("PlayerController")).enabled = true;
-        mPLayer.transform.Find("MainCamera").gameObject.SetActive(true);
-        
-        
-        
-            //(mPLayer.GetComponent<"PlayerController"> (MonoBehaviour)).enabled = true;
-        
-
+        if (PhotonNetwork.room.PlayerCount == 1) {
+            GameObject mPLayer = (GameObject)PhotonNetwork.Instantiate(player.name, new Vector3(10, 2.5f, 10), Quaternion.identity, 0);
+        }
+        else if (PhotonNetwork.room.PlayerCount == 2) {
+            GameObject mPLayer = (GameObject)PhotonNetwork.Instantiate(player.name, new Vector3(-10, 2.5f, -10), Quaternion.identity, 0);
+        }
+      
+       //mPLayer.GetComponent<UnityStandardAssets.Characters.FirstPerson.PlayerController>().enabled = true;
     }
 }

@@ -31,30 +31,9 @@ public class playerPad : Photon.MonoBehaviour {
         }
     }
 
-     void Awake()
-    {
-
-        
-        
-    }
-
 
     // Use this for initialization
-    void Start () {
-
-        
-
-        if (photonView.isMine)
-        {
-            
-        
-        }
-        else
-        {
-            
-        }
-        
-	}
+   
 	
 	// Update is called once per frame
 	void Update ()
