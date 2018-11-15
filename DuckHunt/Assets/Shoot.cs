@@ -27,7 +27,7 @@ public class Shoot : Photon.MonoBehaviour {
     void iShoot()
     {
         iBullet = PhotonNetwork.Instantiate(bullet.name, bulletSpawn.transform.position, Quaternion.identity, 0);
-
+        iBullet.GetComponent<Rigidbody>().velocity =transform.forward * 150;
         Destroy(iBullet, 5.0f);
 
     }

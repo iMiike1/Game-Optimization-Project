@@ -6,7 +6,7 @@ public class Bullet : MonoBehaviour {
 
     void Awake()
     {
-        GetComponent<Rigidbody>().velocity = transform.forward * 100;
+       // GetComponent<Rigidbody>().velocity = Vector3.forward * 100, ;
     }
 
 }
