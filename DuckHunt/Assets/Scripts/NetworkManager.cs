@@ -11,7 +11,6 @@ public class NetworkManager : MonoBehaviour
     public GameObject player;
     public GameObject defaultCamera;
     public GameObject pc;
-    public GameObject cam;
     
     //public GameObject ball;
 
@@ -82,19 +81,10 @@ public class NetworkManager : MonoBehaviour
     void SpawnPlayer()
     {
       GameObject mPLayer= (GameObject) PhotonNetwork.Instantiate(player.name, new Vector3(-4f, 1.5f, -2f), Quaternion.identity, 0);
-<<<<<<< HEAD
         //((MonoBehaviour)mPLayer.GetComponent("PlayerController")).enabled = true;
         mPLayer.GetComponent<UnityStandardAssets.Characters.FirstPerson.PlayerController>().enabled = true;
 
-=======
-        ((MonoBehaviour)mPLayer.GetComponent("PlayerController")).enabled = true;
->>>>>>> parent of 8562ec7... Revert "StillNotWorking"
         mPLayer.transform.Find("MainCamera").gameObject.SetActive(true);
-        
-        
-        
-            //(mPLayer.GetComponent<"PlayerController"> (MonoBehaviour)).enabled = true;
-        
 
     }
 }

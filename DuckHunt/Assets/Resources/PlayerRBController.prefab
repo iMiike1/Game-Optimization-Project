@@ -92,7 +92,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1743297957550906}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: -0.00000016292068}
-  m_LocalPosition: {x: 30.115833, y: 1.0999998, z: 15.3657255}
+  m_LocalPosition: {x: 2.9146595, y: 1.1, z: -10.969792}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4939545711160462}
@@ -304,13 +304,11 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1743297957550906}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 777adaaf82c546b43a8f231d07f18723, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lastSynchroniztionTime: 0
-  targetRotation: {x: 0, y: 0, z: 0, w: 0}
   cam: {fileID: 20414176766248764}
   movementSettings:
     ForwardSpeed: 8
