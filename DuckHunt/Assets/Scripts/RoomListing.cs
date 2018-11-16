@@ -11,6 +11,8 @@ public class RoomListing : MonoBehaviour {
     {
         get { return _roomNameText; }
     }
+
+    public string RoomName { get; private set; }
     public bool Updated { get; set; }
 
 	// Use this for initialization
@@ -36,7 +38,8 @@ public class RoomListing : MonoBehaviour {
 
     public void SetRoomNameText(string text)
     {
-        RoomNameText.text = text;
+        RoomName = text;
+        RoomNameText.text = RoomName;
     }
 
 }

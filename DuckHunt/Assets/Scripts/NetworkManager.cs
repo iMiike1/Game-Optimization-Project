@@ -25,7 +25,7 @@ public class NetworkManager : MonoBehaviour
         else if (PhotonNetwork.room == null)
         {
             //Create Room
-            if (GUI.Button(new Rect(100, 100, 250, 100), "Start Server"))
+            if (GUI.Button(new Rect(30, 30, 50, 50), "Start Server"))
             {
                 PhotonNetwork.CreateRoom(roomName, new RoomOptions()
                 { MaxPlayers = 4, IsOpen = true, IsVisible = true }, lobbyName);
