@@ -17,10 +17,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private float syncTime = 0f;
         private Vector3 syncStartPosition = Vector3.zero;
         private Vector3 syncEndPosition = Vector3.zero;
+        public GameObject gunpivot;
+      
         private Quaternion endRotation = Quaternion.identity;
         public GameObject gun;
 
-      
 
         [Serializable]
         public class MovementSettings
@@ -135,52 +136,59 @@ namespace UnityStandardAssets.Characters.FirstPerson
             lastSynchroniztionTime = Time.deltaTime;
         }
 
+
         private void Start()
         {
-            
+            //GameObject mGun = (GameObject)PhotonNetwork.Instantiate(gun.name, new Vector3(transform.position.x + 0.49f, transform.position.y + .2f, transform.position.z + 1), Quaternion.identity, 0);
 
-            m_RigidBody = GetComponent<Rigidbody>();
-            m_Capsule = GetComponent<CapsuleCollider>();
             if (photonView.isMine) {
-                
+
+                m_RigidBody = GetComponent<Rigidbody>();
+                m_Capsule = GetComponent<CapsuleCollider>();
+
                 Vector3 position = transform.position;
-                position.y += 1.5f;
-                position.z += 0f;
+                position.y += 0.297f;
+                position.z += 0.443f;
+                
                 GameObject.FindWithTag("Camera").GetComponent<Camera>().transform.position = position;
                 GameObject.FindWithTag("Camera").GetComponent<Camera>().transform.rotation = transform.rotation;
                 GameObject.FindWithTag("Camera").GetComponent<Camera>().transform.parent = transform;
                 mouseLook.Init(transform, GameObject.FindWithTag("Camera").GetComponent<Camera>().transform);
 
-                
-               //GameObject mGun = (GameObject)PhotonNetwork.Instantiate(gun.name, new Vector3(transform.position.x, transform.position.y+1, transform.position.z+1), Quaternion.identity, 0);
-               // mGun.transform.parent = GameObject.FindWithTag("Camera").transform;
+              
 
-                
+
+                //mGun.transform.parent = GameObject.FindWithTag("Camera").transform;
+
+
 
             }
         }
 
         void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         {
+
+            //AM DOING THIS
             if (stream.isWriting)
             {
                 stream.SendNext(GetComponent<Rigidbody>().position);
                 stream.SendNext(GetComponent<Rigidbody>().velocity);
                 stream.SendNext(GetComponent<Rigidbody>().rotation);
+                stream.SendNext(gunpivot.transform.rotation);
             }
-            else
+            else //THE OTHER PLAYER  IS DOING
             {
                 Vector3 syncPosition = (Vector3)stream.ReceiveNext();
                 Vector3 syncVelocity = (Vector3)stream.ReceiveNext();
-                Quaternion syncRotation = (Quaternion)stream.ReceiveNext();
+                endRotation = (Quaternion)stream.ReceiveNext();
+                gunpivot.transform.rotation = (Quaternion)stream.ReceiveNext();
 
                 syncTime = 0f;
                 syncDelay = Time.time - lastSynchroniztionTime;
                 lastSynchroniztionTime = Time.time;
+
                 syncEndPosition = (syncPosition + syncVelocity * syncDelay);
                 syncStartPosition = GetComponent<Rigidbody>().position;
-                endRotation = syncRotation;
-
             }
         }
 
@@ -191,6 +199,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 RotateView();
                 Movements();
                 CrossPlatManager();
+
+                
+                gunpivot.transform.rotation = GameObject.FindWithTag("Camera").GetComponent<Camera>().transform.rotation;
+               
+
             }
             else
             {
@@ -211,6 +224,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
             syncTime += Time.deltaTime;
             GetComponent<Rigidbody>().position = Vector3.Lerp(syncStartPosition, syncEndPosition, syncTime / syncDelay);
             GetComponent<Rigidbody>().rotation = endRotation;
+
+           // gunpivot.GetComponent<Transform>().rotation = endRotation;
         }
 
         void Movements()
@@ -341,9 +356,20 @@ namespace UnityStandardAssets.Characters.FirstPerson
             }
         }
 
-   
+        private void OnGUI()
+        {
+            if (photonView.isMine)
+            {
+                GUI.Box(new Rect(Screen.width / 2, Screen.height / 2, 10, 10), "");
+            }
+        }
+
+
 
     }
 
 
-}
+    }
+
+
+

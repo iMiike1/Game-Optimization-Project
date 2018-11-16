@@ -29,7 +29,7 @@ public class PlayerLayoutGroup : MonoBehaviour {
 
     private void PlayerJoinedRoom(PhotonPlayer photonPlayer)
     {
-    https://www.youtube.com/watch?v=tw_SyqxiVgQ&index=5&list=PLkx8oFug638qVMIrtqOnwmqnW6o8WDgQ1 (8.31)
+      // https: //www.youtube.com/watch?v=tw_SyqxiVgQ&index=5&list=PLkx8oFug638qVMIrtqOnwmqnW6o8WDgQ1
     }
 
     private void PlayerLeftRoom(PhotonPlayer photonPlayer)

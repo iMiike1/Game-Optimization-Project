@@ -45,4 +45,6 @@ MonoBehaviour:
   - ChangeColorTo
   - ChangeDirTo
   - ChangePositionTo
+  - MasterIsSendingSpawnPoint
+  - PlayerIsAskingForSpawnPoint
   DisableAutoOpenWizard: 1

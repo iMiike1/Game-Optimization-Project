@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class NetworkManager : MonoBehaviour
+public class NetworkManager : Photon.MonoBehaviour
 {
 
     private const string roomName = "RoomName";
@@ -10,10 +11,33 @@ public class NetworkManager : MonoBehaviour
     private RoomInfo[] roomsList;
     public GameObject player;
 
+
+
+
+    // Move this to game manager, or keep it here
+    // Move this to game manager, or keep it here
+    // Move this to game manager, or keep it here
+    // Move this to game manager, or keep it here
+    // Move this to game manager, or keep it here
+    private SpawnPoint spawnPoints = new SpawnPoint();
+
+
+
     // Use this for initialization
     void Start()
     {
         PhotonNetwork.ConnectUsingSettings("v4.2");
+    }
+
+    void Update()
+    {      
+        if (PhotonNetwork.playerList.Length != null)
+        {
+            for (int i = 0; i < PhotonNetwork.playerList.Length; i++)
+            {
+                Debug.Log("Player name: " + PhotonNetwork.playerList[i].NickName + " Player Number: " + i);
+            }
+        }     
     }
 
     private void OnGUI()
@@ -61,21 +85,44 @@ public class NetworkManager : MonoBehaviour
         Debug.Log("Joined Lobby");
     }
 
+
+
+
     void OnJoinedRoom()
     {
-        SpawnPlayer();
+        // If I am master, just spawn me, if I am not master, ask master for spawn position
+        if (PhotonNetwork.isMasterClient) SpawnPlayer();
+        else photonView.RPC("PlayerIsAskingForSpawnPoint", PhotonTargets.MasterClient, PhotonNetwork.player.NickName);
+    }
+
+    [PunRPC] void PlayerIsAskingForSpawnPoint(string playerName)
+    {
+        Vector3 tempSpawnPoint = spawnPoints.AssignMeSpawnPoints(1);
+        float [] tempPosCoordinates = new float[3];
+        tempPosCoordinates[0] = tempSpawnPoint.x;
+        tempPosCoordinates[1] = tempSpawnPoint.y;
+        tempPosCoordinates[2] = tempSpawnPoint.z;
+
+        photonView.RPC("MasterIsSendingSpawnPoint", PhotonTargets.Others, tempPosCoordinates, playerName);
+        Debug.Log("I am sednding RPC to player");
+    }
+
+    [PunRPC] void MasterIsSendingSpawnPoint(float [] spawnPointCoordinates, string playerName)
+    {
+        // If I was asking for the spawn point, execute this, otherwise not
+        if (playerName == PhotonNetwork.player.NickName)
+        {
+            GameObject mPLayer = (GameObject)PhotonNetwork.Instantiate(player.name, new Vector3(spawnPointCoordinates[0], spawnPointCoordinates[1], spawnPointCoordinates[2]), Quaternion.identity, 0);
+            Debug.Log("I have intialize player");
+        }
     }
 
 
     void SpawnPlayer()
     {
-        if (PhotonNetwork.room.PlayerCount == 1) {
-            GameObject mPLayer = (GameObject)PhotonNetwork.Instantiate(player.name, new Vector3(10, 2.5f, 10), Quaternion.identity, 0);
-        }
-        else if (PhotonNetwork.room.PlayerCount == 2) {
-            GameObject mPLayer = (GameObject)PhotonNetwork.Instantiate(player.name, new Vector3(-10, 2.5f, -10), Quaternion.identity, 0);
-        }
-      
-       //mPLayer.GetComponent<UnityStandardAssets.Characters.FirstPerson.PlayerController>().enabled = true;
+        GameObject mPLayer = (GameObject)PhotonNetwork.Instantiate(player.name, spawnPoints.AssignMeSpawnPoints(0), Quaternion.identity, 0);
+
+
+        //mPLayer.GetComponent<UnityStandardAssets.Characters.FirstPerson.PlayerController>().enabled = true;
     }
 }

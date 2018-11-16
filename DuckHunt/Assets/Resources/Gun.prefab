@@ -140,6 +140,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bullet: {fileID: 1229482672591616, guid: 8765e3b9d66054542854385bf0ebc144, type: 2}
   bulletSpawn: {fileID: 4151868874637798}
+  damage: 10
+  range: 100
 --- !u!114 &114725585054899816
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -161,6 +163,7 @@ MonoBehaviour:
   ownershipTransfer: 0
   ObservedComponents:
   - {fileID: 4387468216091468}
+  - {fileID: 0}
   ObservedComponentsFoldoutOpen: 1
   viewIdField: 0
   instantiationId: -1
