@@ -30,14 +30,14 @@ public class NetworkManager : Photon.MonoBehaviour
     }
 
     void Update()
-    {      
+    {
         if (PhotonNetwork.playerList.Length != null)
         {
             for (int i = 0; i < PhotonNetwork.playerList.Length; i++)
             {
                 Debug.Log("Player name: " + PhotonNetwork.playerList[i].NickName + " Player Number: " + i);
             }
-        }     
+        }
     }
 
     private void OnGUI()

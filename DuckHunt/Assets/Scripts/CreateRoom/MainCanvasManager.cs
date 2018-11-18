@@ -11,8 +11,12 @@ public class MainCanvasManager : MonoBehaviour {
     public LobbyCanvas LobbyCanvas
     { get { return _lobbyCanvas; } }
 
-
-    
+    [SerializeField]
+    private CurrentRoomCanvas _currentRoomCanvas;
+    public CurrentRoomCanvas CurrentRoomCanvas
+    {
+        get { return _currentRoomCanvas; }
+    }
 
     private void Awake()
     {

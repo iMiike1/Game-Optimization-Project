@@ -17,14 +17,14 @@ public class UI_Manager : MonoBehaviour
         IF_playerName = GameObject.Find("InputPlayerName").GetComponent<InputField>();
     }
 
-    private void Update()
-    {
-        // If player has pressed enter and text in input is greater than 4, assign player name into photon variable
-        if (Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Return) && IF_playerName.text != "" && IF_playerName.text.Length > 4)
-        {
-            PhotonNetwork.player.NickName = IF_playerName.text;
-            IF_playerName.gameObject.SetActive(false);
-        }
-    }
+    //private void Update()
+    //{
+    //    // If player has pressed enter and text in input is greater than 4, assign player name into photon variable
+    //    if (Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Return) && IF_playerName.text != "" && IF_playerName.text.Length > 4)
+    //    {
+    //        PhotonNetwork.player.NickName = IF_playerName.text;
+    //        IF_playerName.gameObject.SetActive(false);
+    //    }
+    //}
 
 }
