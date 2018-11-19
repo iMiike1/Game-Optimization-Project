@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Runtime.InteropServices;
 
 enum EnumTeam
 {
@@ -8,31 +9,46 @@ enum EnumTeam
 
 public class SpawnPoint
 {
-    // TODO: GET THE VALUES FROM DLL !!!!
-    // TODO: GET THE VALUES FROM DLL !!!!
-    // TODO: GET THE VALUES FROM DLL !!!!
-    // TODO: GET THE VALUES FROM DLL !!!!
-    const int teamOneNumberOfSlots = 1;
-    const int teamTwoNumberOfSlots = 3;
 
+    // importing functions from DLL
+    [DllImport("SpawnPointsDuckHunt", EntryPoint = "GetTeamSpawnPositionSize")]
+    public static extern int GetTeamSpawnPointSize();
 
+    [DllImport("SpawnPointsDuckHunt", EntryPoint = "GetTeamSpawnPosition")]
+    public static extern Vector3 GetPosition(int ID);
 
-    private Vector3 [] teamOneSpawnPoints = new Vector3[teamOneNumberOfSlots];
-    private Vector3 [] teamTwoSpawnPoints = new Vector3[teamTwoNumberOfSlots];
+    [DllImport("SpawnPointsDuckHunt", EntryPoint = "GetSoloPlayerSpawnPosition")]
+    public static extern Vector3 GetSoloPlayerSpawnPosition();
 
-    bool[] isSlotInTeamOneEmpty = new bool[teamOneNumberOfSlots];
-    bool[] isSlotInTeamTwoEmpty = new bool[teamTwoNumberOfSlots];
+    //number of avaliable slots in each team
+    private int teamOneNumberOfSlots;
+    private int teamTwoNumberOfSlots;
 
+    //array of positions in each team
+    private Vector3[] teamOneSpawnPoints;
+    private Vector3[] teamTwoSpawnPoints;
+
+    //checks for avaliable slot
+    bool[] isSlotInTeamOneEmpty;
+    bool[] isSlotInTeamTwoEmpty;
+     
     // Constructors
     public SpawnPoint()
     {
+        //there is only one shooter
+        teamOneNumberOfSlots = 1;
+        //the other players
+        teamTwoNumberOfSlots = GetTeamSpawnPointSize();
+
+        isSlotInTeamOneEmpty = new bool[teamOneNumberOfSlots];
+        isSlotInTeamTwoEmpty = new bool[teamTwoNumberOfSlots];
+
         // Initialioze team one spawn points
-        teamOneSpawnPoints[0] = new Vector3(10.0f, 3.5f, -10.0f);
+        teamOneSpawnPoints[0] = GetSoloPlayerSpawnPosition();
 
         // Initialize team two spawn points
-        teamTwoSpawnPoints[0] = new Vector3(-10.0f, 3.5f, 10.0f);
-        teamTwoSpawnPoints[1] = new Vector3(0.0f, 3.5f, 10.0f);
-        teamTwoSpawnPoints[2] = new Vector3(10.0f, 3.5f, 10.0f);
+        for (int i = 0; i < teamTwoNumberOfSlots; i++)
+            teamTwoSpawnPoints[i] = GetPosition(i);
 
         // Initialize boolean array, set all to true, so all slots are empty
         for (int i = 0; i < isSlotInTeamOneEmpty.Length; i++) isSlotInTeamOneEmpty[i] = true;

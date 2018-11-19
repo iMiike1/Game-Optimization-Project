@@ -1,0 +1,5 @@
+﻿  SpawnPointsLibrary.cpp
+c:\users\k1520501\source\repos\spawnpointsduckhunt\spawnpointsduckhunt\spawnpointslibrary.cpp(6): warning C4273: 'TestMultiply': inconsistent dll linkage
+  c:\users\k1520501\source\repos\spawnpointsduckhunt\spawnpointsduckhunt\spawnpointslibrary.h(6): note: see previous definition of 'TestMultiply'
+     Creating library c:\users\k1520501\source\repos\SpawnPointsDuckHunt\Debug\SpawnPointsDuckHunt.lib and object c:\users\k1520501\source\repos\SpawnPointsDuckHunt\Debug\SpawnPointsDuckHunt.exp
+  SpawnPointsDuckHunt.vcxproj -> c:\users\k1520501\source\repos\SpawnPointsDuckHunt\Debug\SpawnPointsDuckHunt.dll

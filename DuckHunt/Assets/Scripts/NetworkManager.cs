@@ -35,7 +35,7 @@ public class NetworkManager : Photon.MonoBehaviour
         {
             for (int i = 0; i < PhotonNetwork.playerList.Length; i++)
             {
-                 Debug.Log("Player name: " + PhotonNetwork.playerList[i].NickName + " Player Number: " + i);
+             //    Debug.Log("Player name: " + PhotonNetwork.playerList[i].NickName + " Player Number: " + i);
             }
         }
     }
@@ -124,7 +124,7 @@ public class NetworkManager : Photon.MonoBehaviour
 
     void SpawnPlayer()
     {
-        //GameObject mPLayer = (GameObject)PhotonNetwork.Instantiate(player.name, spawnPoints.AssignMeSpawnPoints(0), Quaternion.identity, 0);
+        GameObject mPLayer = (GameObject)PhotonNetwork.Instantiate(player.name, spawnPoints.AssignMeSpawnPoints(0), Quaternion.identity, 0);
 
 
         //mPLayer.GetComponent<UnityStandardAssets.Characters.FirstPerson.PlayerController>().enabled = true;

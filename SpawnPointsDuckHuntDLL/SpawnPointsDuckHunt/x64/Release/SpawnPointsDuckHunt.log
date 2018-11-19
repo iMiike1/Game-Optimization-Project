@@ -1,0 +1,23 @@
+﻿  SpawnPointsLibrary.cpp
+c:\github\game-optimization-project\spawnpointsduckhuntdll\spawnpointsduckhunt\spawnpointslibrary.h(19): warning C4190: 'GetTeamSpawnPosition' has C-linkage specified, but returns UDT 'Vector3' which is incompatible with C
+  c:\github\game-optimization-project\spawnpointsduckhuntdll\spawnpointsduckhunt\vector3.h(4): note: see declaration of 'Vector3'
+c:\github\game-optimization-project\spawnpointsduckhuntdll\spawnpointsduckhunt\spawnpointslibrary.h(20): warning C4190: 'GetSoloPlayerSpawnPosition' has C-linkage specified, but returns UDT 'Vector3' which is incompatible with C
+  c:\github\game-optimization-project\spawnpointsduckhuntdll\spawnpointsduckhunt\vector3.h(4): note: see declaration of 'Vector3'
+c:\github\game-optimization-project\spawnpointsduckhuntdll\spawnpointsduckhunt\spawnpointslibrary.cpp(8): warning C4273: 'GetTeamSpawnPositionSize': inconsistent dll linkage
+  c:\github\game-optimization-project\spawnpointsduckhuntdll\spawnpointsduckhunt\spawnpointslibrary.h(18): note: see previous definition of 'GetTeamSpawnPositionSize'
+c:\github\game-optimization-project\spawnpointsduckhuntdll\spawnpointsduckhunt\spawnpointslibrary.cpp(10): warning C4190: 'GetTeamSpawnPosition' has C-linkage specified, but returns UDT 'Vector3' which is incompatible with C
+  c:\github\game-optimization-project\spawnpointsduckhuntdll\spawnpointsduckhunt\vector3.h(4): note: see declaration of 'Vector3'
+c:\github\game-optimization-project\spawnpointsduckhuntdll\spawnpointsduckhunt\spawnpointslibrary.cpp(10): warning C4273: 'GetTeamSpawnPosition': inconsistent dll linkage
+  c:\github\game-optimization-project\spawnpointsduckhuntdll\spawnpointsduckhunt\spawnpointslibrary.h(19): note: see previous definition of 'GetTeamSpawnPosition'
+c:\github\game-optimization-project\spawnpointsduckhuntdll\spawnpointsduckhunt\spawnpointslibrary.cpp(12): warning C4190: 'GetSoloPlayerSpawnPosition' has C-linkage specified, but returns UDT 'Vector3' which is incompatible with C
+  c:\github\game-optimization-project\spawnpointsduckhuntdll\spawnpointsduckhunt\vector3.h(4): note: see declaration of 'Vector3'
+c:\github\game-optimization-project\spawnpointsduckhuntdll\spawnpointsduckhunt\spawnpointslibrary.cpp(12): warning C4273: 'GetSoloPlayerSpawnPosition': inconsistent dll linkage
+  c:\github\game-optimization-project\spawnpointsduckhuntdll\spawnpointsduckhunt\spawnpointslibrary.h(20): note: see previous definition of 'GetSoloPlayerSpawnPosition'
+  Vector3.cpp
+     Creating library C:\Github\Game-Optimization-Project\SpawnPointsDuckHuntDLL\x64\Release\SpawnPointsDuckHunt.lib and object C:\Github\Game-Optimization-Project\SpawnPointsDuckHuntDLL\x64\Release\SpawnPointsDuckHunt.exp
+  Generating code
+  9 of 9 functions (100.0%) were compiled.
+    4 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  SpawnPointsDuckHunt.vcxproj -> C:\Github\Game-Optimization-Project\SpawnPointsDuckHuntDLL\x64\Release\SpawnPointsDuckHunt.dll
