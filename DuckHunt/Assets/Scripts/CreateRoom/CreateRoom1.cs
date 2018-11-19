@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class CreateRoom1 : MonoBehaviour {
 
+    public PhotonPlayer PhotonPlayer { get; private set; }
+
     [SerializeField]
     private Text _roomName;
     private Text RoomName
@@ -15,10 +17,14 @@ public class CreateRoom1 : MonoBehaviour {
     public void onClick_CreateRoom()
     {
         RoomOptions roomOptions = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = 4 };
+        print("create room successfully sent.");
+        //PhotonNetwork.player.name = PhotonPlayer.name;
 
         if (PhotonNetwork.CreateRoom(RoomName.text, roomOptions, TypedLobby.Default))
         {
-            print("create room successfully sent.");
+           
+
+           Debug.Log("name:..." + PhotonNetwork.player.name);
         }
         else
         {
