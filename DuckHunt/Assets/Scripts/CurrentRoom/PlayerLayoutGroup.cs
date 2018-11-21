@@ -81,6 +81,12 @@ public class PlayerLayoutGroup : MonoBehaviour
         }
     }
 
+
+    public void OnClickStartGame()
+    {
+
+    }
+
     public void OnClickRoomState()
     {
         if (!PhotonNetwork.isMasterClient)

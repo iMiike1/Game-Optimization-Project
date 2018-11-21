@@ -71,6 +71,7 @@ public class NetworkManager : Photon.MonoBehaviour
 
     void OnConnectedToMaster()
     {
+        PhotonNetwork.automaticallySyncScene = true;
         PhotonNetwork.JoinLobby(lobbyName);
     }
 
@@ -93,18 +94,18 @@ public class NetworkManager : Photon.MonoBehaviour
     void OnJoinedRoom()
     {
         // If I am master, just spawn me, if I am not master, ask master for spawn position
-        if (PhotonNetwork.isMasterClient) SpawnPlayer();
-         else photonView.RPC("PlayerIsAskingForSpawnPoint", PhotonTargets.MasterClient, PhotonNetwork.player.NickName);
+       // if (PhotonNetwork.isMasterClient) SpawnPlayer();
+       //  else photonView.RPC("PlayerIsAskingForSpawnPoint", PhotonTargets.MasterClient, PhotonNetwork.player.NickName);
     }
 
     [PunRPC]
     void PlayerIsAskingForSpawnPoint(string playerName)
     {
-        Vector3 tempSpawnPoint = spawnPoints.AssignMeSpawnPoints(1);
-        float[] tempPosCoordinates = new float[3];
-        tempPosCoordinates[0] = tempSpawnPoint.x;
-        tempPosCoordinates[1] = tempSpawnPoint.y;
-        tempPosCoordinates[2] = tempSpawnPoint.z;
+        ////Vector3 tempSpawnPoint = spawnPoints.AssignMeSpawnPoints(1);
+        //float[] tempPosCoordinates = new float[3];
+        //tempPosCoordinates[0] = tempSpawnPoint.x;
+        //tempPosCoordinates[1] = tempSpawnPoint.y;
+        //tempPosCoordinates[2] = tempSpawnPoint.z;
 
         // photonView.RPC("MasterIsSendingSpawnPoint", PhotonTargets.Others, tempPosCoordinates, playerName);
         Debug.Log("I am sednding RPC to player");
@@ -124,7 +125,7 @@ public class NetworkManager : Photon.MonoBehaviour
 
     void SpawnPlayer()
     {
-        GameObject mPLayer = (GameObject)PhotonNetwork.Instantiate(player.name, spawnPoints.AssignMeSpawnPoints(0), Quaternion.identity, 0);
+        //GameObject mPLayer = (GameObject)PhotonNetwork.Instantiate(player.name, spawnPoints.AssignMeSpawnPoints(0), Quaternion.identity, 0);
 
 
         //mPLayer.GetComponent<UnityStandardAssets.Characters.FirstPerson.PlayerController>().enabled = true;

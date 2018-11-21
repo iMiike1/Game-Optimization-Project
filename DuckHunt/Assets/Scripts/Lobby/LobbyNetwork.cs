@@ -13,6 +13,7 @@ public class LobbyNetwork : MonoBehaviour {
     private void OnConnectedToMaster()
     {
         print("Connected to master.");
+        PhotonNetwork.automaticallySyncScene = true;
         PhotonNetwork.playerName = PlayerNetwork.Instance.PlayerName;
 
         PhotonNetwork.JoinLobby(TypedLobby.Default);

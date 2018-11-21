@@ -31,7 +31,7 @@ public class SpawnPoint
     //checks for avaliable slot
     bool[] isSlotInTeamOneEmpty;
     bool[] isSlotInTeamTwoEmpty;
-     
+
     // Constructors
     public SpawnPoint()
     {
@@ -44,7 +44,7 @@ public class SpawnPoint
         isSlotInTeamTwoEmpty = new bool[teamTwoNumberOfSlots];
 
         // Initialioze team one spawn points
-        teamOneSpawnPoints[0] = GetSoloPlayerSpawnPosition();
+        //teamOneSpawnPoints[0] = GetSoloPlayerSpawnPosition();
 
         // Initialize team two spawn points
         for (int i = 0; i < teamTwoNumberOfSlots; i++)
@@ -52,7 +52,7 @@ public class SpawnPoint
 
         // Initialize boolean array, set all to true, so all slots are empty
         for (int i = 0; i < isSlotInTeamOneEmpty.Length; i++) isSlotInTeamOneEmpty[i] = true;
-        
+
         // Initialize boolean array, set all to true, so all slots are empty
         for (int i = 0; i < isSlotInTeamTwoEmpty.Length; i++) isSlotInTeamTwoEmpty[i] = true;
     }
