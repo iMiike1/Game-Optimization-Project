@@ -13,78 +13,80 @@ public class NewGameManager : Photon.MonoBehaviour {
 
 
     // Move this to game manager, or keep it here
-    // Move this to game manager, or keep it here
-    // Move this to game manager, or keep it here
-    // Move this to game manager, or keep it here
-    // Move this to game manager, or keep it here
+    
     private SpawnPoint spawnPoints = new SpawnPoint();
 
 
-
-    // Use this for initialization
-    void Start()
+    private void Start()
     {
-        PhotonNetwork.ConnectUsingSettings("v4.2");
+        OnJoinedRoom();
     }
 
-    void Update()
-    {
-        if (PhotonNetwork.playerList.Length != null)
-        {
-            for (int i = 0; i < PhotonNetwork.playerList.Length; i++)
-            {
-                //    Debug.Log("Player name: " + PhotonNetwork.playerList[i].NickName + " Player Number: " + i);
-            }
-        }
-    }
 
-    private void OnGUI()
-    {
-        if (!PhotonNetwork.connected)
-        {
-            GUILayout.Label(PhotonNetwork.connectionStateDetailed.ToString());
-        }
-        else if (PhotonNetwork.room == null)
-        {
-            //Create Room
-            if (GUI.Button(new Rect(30, 30, 50, 50), "Start Server"))
-            {
-                PhotonNetwork.CreateRoom(roomName, new RoomOptions()
-                { MaxPlayers = 4, IsOpen = true, IsVisible = true }, lobbyName);
+    //// Use this for initialization
+    //void Start()
+    //{
+    //    PhotonNetwork.ConnectUsingSettings("v4.2");
+    //}
 
-            }
+    //void Update()
+    //{
+    //    if (PhotonNetwork.playerList.Length != null)
+    //    {
+    //        for (int i = 0; i < PhotonNetwork.playerList.Length; i++)
+    //        {
+    //            //    Debug.Log("Player name: " + PhotonNetwork.playerList[i].NickName + " Player Number: " + i);
+    //        }
+    //    }
+    //}
 
-            if (roomsList != null)
-            {
-                for (int i = 0; i < roomsList.Length; i++)
-                {
-                    if (GUI.Button(new Rect(100, 250 + (110 * i), 250, 100), "Join" + roomsList[i].Name))
-                    {
-                        PhotonNetwork.JoinRoom(roomsList[i].Name);
-                    }
-                }
-            }
-        }
-    }
+    //private void OnGUI()
+    //{
+    //    if (!PhotonNetwork.connected)
+    //    {
+    //        GUILayout.Label(PhotonNetwork.connectionStateDetailed.ToString());
+    //    }
+    //    else if (PhotonNetwork.room == null)
+    //    {
+    //        //Create Room
+    //        if (GUI.Button(new Rect(30, 30, 50, 50), "Start Server"))
+    //        {
+    //            PhotonNetwork.CreateRoom(roomName, new RoomOptions()
+    //            { MaxPlayers = 4, IsOpen = true, IsVisible = true }, lobbyName);
 
-    void OnConnectedToMaster()
-    {
-        PhotonNetwork.automaticallySyncScene = true;
-        PhotonNetwork.JoinLobby(lobbyName);
-    }
+    //        }
 
-    void OnReceivedRoomListUpdate()
-    {
-        Debug.Log("Room was created");
-        roomsList = PhotonNetwork.GetRoomList();
-    }
+    //        if (roomsList != null)
+    //        {
+    //            for (int i = 0; i < roomsList.Length; i++)
+    //            {
+    //                if (GUI.Button(new Rect(100, 250 + (110 * i), 250, 100), "Join" + roomsList[i].Name))
+    //                {
+    //                    PhotonNetwork.JoinRoom(roomsList[i].Name);
+    //                }
+    //            }
+    //        }
+    //    }
+    //}
 
-    void OnJoinedLobby()
-    {
-        //if (!PhotonNetwork.inRoom)
-        //    MainCanvasManager.Instance.LobbyCanvas.transform.SetAsLastSibling();
-        Debug.Log("Joined Lobby");
-    }
+    //void OnConnectedToMaster()
+    //{
+    //    PhotonNetwork.automaticallySyncScene = true;
+    //    PhotonNetwork.JoinLobby(lobbyName);
+    //}
+
+    //void OnReceivedRoomListUpdate()
+    //{
+    //    Debug.Log("Room was created");
+    //    roomsList = PhotonNetwork.GetRoomList();
+    //}
+
+    //void OnJoinedLobby()
+    //{
+    //    //if (!PhotonNetwork.inRoom)
+    //    //    MainCanvasManager.Instance.LobbyCanvas.transform.SetAsLastSibling();
+    //    Debug.Log("Joined Lobby");
+    //}
 
 
 
@@ -92,8 +94,9 @@ public class NewGameManager : Photon.MonoBehaviour {
     void OnJoinedRoom()
     {
         //If I am master, just spawn me, if I am not master, ask master for spawn position
-         if (PhotonNetwork.isMasterClient) SpawnPlayer();
-            else photonView.RPC("PlayerIsAskingForSpawnPoint", PhotonTargets.MasterClient, PhotonNetwork.player.NickName);
+        SpawnPlayer();  
+         //if (PhotonNetwork.isMasterClient) SpawnPlayer();
+         //   else photonView.RPC("PlayerIsAskingForSpawnPoint", PhotonTargets.MasterClient, PhotonNetwork.player.NickName);
     }
 
     [PunRPC]
@@ -124,8 +127,7 @@ public class NewGameManager : Photon.MonoBehaviour {
     void SpawnPlayer()
     {
         GameObject mPLayer = (GameObject)PhotonNetwork.Instantiate(player.name, spawnPoints.AssignMeSpawnPoints(0), Quaternion.identity, 0);
-
-
+        
         mPLayer.GetComponent<UnityStandardAssets.Characters.FirstPerson.PlayerController>().enabled = true;
     }
 }

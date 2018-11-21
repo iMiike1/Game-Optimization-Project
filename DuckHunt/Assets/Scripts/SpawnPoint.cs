@@ -25,7 +25,7 @@ public class SpawnPoint
     private int teamTwoNumberOfSlots;
 
     //array of positions in each team
-    private Vector3[] teamOneSpawnPoints;
+    private Vector3 teamOneSpawnPoints;
     private Vector3[] teamTwoSpawnPoints;
 
     //checks for avaliable slot
@@ -39,12 +39,12 @@ public class SpawnPoint
         teamOneNumberOfSlots = 1;
         //the other players
         teamTwoNumberOfSlots = GetTeamSpawnPointSize();
-
+        teamTwoSpawnPoints = new Vector3[GetTeamSpawnPointSize()];
         isSlotInTeamOneEmpty = new bool[teamOneNumberOfSlots];
         isSlotInTeamTwoEmpty = new bool[teamTwoNumberOfSlots];
 
         // Initialioze team one spawn points
-        //teamOneSpawnPoints[0] = GetSoloPlayerSpawnPosition();
+        teamOneSpawnPoints = GetSoloPlayerSpawnPosition();
 
         // Initialize team two spawn points
         for (int i = 0; i < teamTwoNumberOfSlots; i++)
@@ -80,7 +80,7 @@ public class SpawnPoint
                     {
                         // Return new spawn points
                         isSlotInTeamOneEmpty[tempSpawnId] = false;
-                        return teamOneSpawnPoints[tempSpawnId];
+                        return teamOneSpawnPoints;
                     }
                     Debug.Log("ID INSIDE WHILE LOOOP: " + tempSpawnId);
 
@@ -124,8 +124,7 @@ public class SpawnPoint
         switch (team)
         {
             case (int)EnumTeam.TEAM_ONE:
-                if (slotID >= teamOneSpawnPoints.Length) errorMessage = "ERROR: Array out of range. ID for team one was higher than the lenght of array.";
-                else return teamOneSpawnPoints[slotID];
+                return teamOneSpawnPoints;
                 break;
             case (int)EnumTeam.TEAM_TWO:
                 if (slotID >= teamTwoSpawnPoints.Length) errorMessage = "ERROR: Array out of range. ID for team two was higher than the lenght of array.";
